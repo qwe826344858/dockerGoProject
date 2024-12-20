@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dockerGoProjectProto;
+option go_package = "dockerGoProjectProto/";
+
+import "DockerGoProjectConst.proto";
+import "DockerGoProjectCommon.proto";
+
+service DockerGoProjectAo {
+  // 获取商品信息
+  rpc GetItemInfo(GetItemInfoReq) returns (GetItemInfoResp) {}
+
+}
+
+
+
+
