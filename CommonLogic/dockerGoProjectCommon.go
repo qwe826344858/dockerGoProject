@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"time"
+	envcfg "dockerGoProject/DockerScript"
 )
 
 type GRpcClientParam struct {
@@ -23,7 +24,10 @@ func GetDockerGoProjectAoClient() (param *GRpcClientParam,client proto.DockerGoP
 		log.Fatalf("failed to GetServicePort: %v", errMsg)
 		return
 	}
-	port := fmt.Sprintf("localhost:%d",p)
+
+	EnvCfg := envcfg.GetEnvConfig()
+	GrpcHost := EnvCfg.GRpcConf.Host
+	port := fmt.Sprintf("%s:%d",GrpcHost,p)
 
 	// 创建带有超时的上下文
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)

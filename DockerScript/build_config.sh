@@ -6,11 +6,12 @@ makeGoFile() {
 
   ip=$(getCurrentIp)
 	{
-		echo 'package main'
+		echo 'package envcfg'
 		echo ''
 		echo 'type EnvConfig struct {'
 		echo '	RedisConf RedisConfig `json:"redis_conf"`'
 		echo '	MysqlConf MysqlConfig `json:"mysql_conf"`'
+		echo '	GRpcConf GRpcConfig `json:"grpc_config"`'
 		echo '}'
 		echo ''
 		echo 'type RedisConfig struct {'
@@ -23,7 +24,11 @@ makeGoFile() {
 		echo '	Password string `json:"password"`'
 		echo '}'
 		echo ''
-		echo 'func getEnvConfig() *EnvConfig {'
+		echo 'type GRpcConfig struct {'
+    echo '	Host     string `json:"host"`'
+    echo '}'
+    echo ''
+		echo 'func GetEnvConfig() *EnvConfig {'
 		echo '	return &EnvConfig{'
 		echo '		RedisConf: RedisConfig{'
 		echo "			Host: \"$ip\","
@@ -33,6 +38,9 @@ makeGoFile() {
 		echo '			Username: "root",'
 		echo '			Password: "zoneslee",'
 		echo '		},'
+		echo '		GRpcConf: GRpcConfig{'
+    echo "			Host: \"$ip\","
+    echo '		},'
 		echo '	}'
 		echo '}'
 	} > envGoConfig.go
@@ -55,7 +63,10 @@ makePythonFile() {
     echo "            \"host\": \"$ip\","  # 使用变量替换
     echo '            "username": "root",'
     echo '            "password": "zoneslee",'
-    echo '        }'
+    echo '        },'
+    echo '        "grpc_conf": {'
+    echo "            \"host\": \"$ip\","  # 使用变量替换
+    echo '        },'
     echo '    }'
   } > envPythonConfig.py
 

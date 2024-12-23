@@ -1,4 +1,5 @@
 # Dockerfile for custom base image
+# 创建一个安装有python 依赖的镜像
 FROM python:3.11
 
 # 设置工作目录
