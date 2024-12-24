@@ -5,7 +5,7 @@ FROM golang:1.23.4
 WORKDIR /usr/src/app/dockerGoProject
 
 # 复制Ao服务到容器中
-COPY DockerGoProjectAoServer.exe /usr/src/app/dockerGoProject
+COPY DockerGoProjectAoServer /usr/src/app/dockerGoProject
 
 ENV GOPROXY=https://goproxy.cn,direct
 ENV GOPRIVATE=.gitlab.com,.gite.com
