@@ -2,6 +2,7 @@ package main
 
 import (
 	"dockerGoProject/CommonLogic"
+	extProto "dockerGoProject/ExternalProto"
 	proto "dockerGoProject/proto"
 	"fmt"
 	"log"
@@ -10,6 +11,7 @@ import (
 func main(){
 	test1()
 	test2()
+	testPyService()
 }
 
 
@@ -66,4 +68,36 @@ func test2(){
 	fmt.Sprintf("resp:%v",resp)
 
 	defer CommonLogic.CloseClient(param)
+}
+
+
+func testPyService(){
+	f := CommonLogic.NewGRpcFactory()
+	client,err := f.GetClient("DockerProjectAo")
+	if err != nil {
+		log.Fatalf("GetDockerGoProjectAoClient err:%v",err)
+		return
+	}
+
+	req := &extProto.GetItemInfoReq{
+		ReqHeader: &extProto.RequestHeader{},
+		ItemId: 2,
+	}
+
+	// 类型断言为具体的客户端类型
+	dockerPyClient, ok := client.(extProto.DockerProjectAoClient)
+	if !ok {
+		log.Fatalf("client is not of type DockerGoProjectAoClient")
+		return
+	}
+
+	resp,err := dockerPyClient.GetItemInfo(f.Param.Ctx,req)
+	if err != nil{
+		log.Fatalf("GetItemInfo err:%v",err)
+		return
+	}
+
+	fmt.Sprintf("resp:%v",resp)
+
+	defer f.CloseClient()
 }
