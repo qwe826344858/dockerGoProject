@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dockerProjectProto;
+option go_package = "dockerProjectProto/";
+
+//请求类型
+enum RequestType{
+  REQUEST_TYPE_COMMON = 0;  // 默认请求（直接调用）
+  REQUEST_TYPE_GRPC = 1;    // grpc请求
+}
+
+
+// 用户校验类型
+enum ValidUserType{
+  VALID_USER_TYPE_COMMON = 0;   //默认类型
+  VALID_USER_TYPE_BLACK_LIST = 1;   //黑名单用户
+  VALID_USER_TYPE_WHITE_LIST = 2;   //白名单用户
+}

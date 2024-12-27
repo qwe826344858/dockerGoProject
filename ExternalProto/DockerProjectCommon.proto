@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package dockerProjectProto;
+option go_package = "dockerProjectProto/";
+
+message RequestHeader {
+  string reqSeq = 1; // 请求序列号，全局唯一
+  string source = 2;
+}
+
+message ResponseHeader {
+  uint32 errno = 1;
+  string errmsg = 2;
+}
+
+message  GetItemInfoReq{
+  RequestHeader reqHeader = 1;
+  int64 itemId = 2;   //商品id
+}
+
+message  GetItemInfoResp{
+  ResponseHeader respHeader = 1;
+  int64 id = 2;
+  string itemSourceName = 3;  // 商品英文名称
+  string itemCnName = 4;  // 商品中文名称
+  int32 sellOnlineCount = 5;  // 在售数量
+  string picUrl = 6; // 商品图片
+  float prices = 7; //当前价格
+  string currency = 8;  //货币类型
+  int64 addtime = 9;  //添加时间
+  string modifytime = 10; //修改时间
+}
+

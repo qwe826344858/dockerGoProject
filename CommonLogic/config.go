@@ -6,7 +6,8 @@ type Port int64
 type ServiceName string
 
 var m = map[ServiceName]Port{
-"DockerGoProjectAo": 40001,
+	"DockerGoProjectAo": 40001,	// go 服务
+	"DockerProjectAo": 50001,	// python 服务
 }
 
 // 获取服务的分配的端口号
