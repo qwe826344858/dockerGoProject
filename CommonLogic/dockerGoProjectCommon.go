@@ -2,6 +2,7 @@ package CommonLogic
 
 import (
 	"context"
+	extProto "dockerGoProject/ExternalProto"
 	proto "dockerGoProject/proto"
 	"fmt"
 	"google.golang.org/grpc"
@@ -59,5 +60,23 @@ func CloseClient(param *GRpcClientParam){
 	defer param.Cancel()
 	defer param.Conn.Close()
 
+	return
+}
+
+
+func GetDockerProjectAoClient()(f *GRpcFactory,Client extProto.DockerProjectAoClient,err error){
+	f = NewGRpcFactory()
+	client,err := f.GetClient("DockerProjectAo")
+	if err != nil {
+		log.Fatalf("GetDockerGoProjectAoClient err:%v",err)
+		return
+	}
+
+	// 类型断言为具体的客户端类型
+	Client, ok := client.(extProto.DockerProjectAoClient)
+	if !ok {
+		err = fmt.Errorf("client is not of type DockerGoProjectAoClient")
+		return
+	}
 	return
 }

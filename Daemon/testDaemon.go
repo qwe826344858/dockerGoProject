@@ -41,7 +41,7 @@ func test1(){
 		return
 	}
 
-	fmt.Sprintf("resp:%v",resp)
+	fmt.Printf("test1 resp:%v \n",resp)
 
 	defer f.CloseClient()
 }
@@ -65,7 +65,7 @@ func test2(){
 		return
 	}
 
-	fmt.Sprintf("resp:%v",resp)
+	fmt.Printf("test2 resp:%v \n",resp)
 
 	defer CommonLogic.CloseClient(param)
 }
@@ -97,7 +97,7 @@ func testPyService(){
 		return
 	}
 
-	fmt.Sprintf("resp:%v",resp)
+	fmt.Printf("testPyService resp:%v \n",resp)
 
 	defer f.CloseClient()
 }
