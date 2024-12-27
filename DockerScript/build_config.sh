@@ -1,6 +1,7 @@
 #!/bin/bash 
 
 makeGoFile() {
+  DOCKER_IP=$(ifconfig docker0 | grep 'inet ' | awk '{print $2}')
   # 清空文件
   > envGoConfig.go
 
@@ -39,7 +40,7 @@ makeGoFile() {
 		echo '			Password: "zoneslee",'
 		echo '		},'
 		echo '		GRpcConf: GRpcConfig{'
-    echo "			Host: \"$ip\","
+    echo "			Host: \"$DOCKER_IP\","
     echo '		},'
 		echo '	}'
 		echo '}'
@@ -49,6 +50,7 @@ makeGoFile() {
 }
 
 makePythonFile() {
+  DOCKER_IP=$(ifconfig docker0 | grep 'inet ' | awk '{print $2}')
   # 清空文件
   > envPythonConfig.py
 
@@ -65,7 +67,7 @@ makePythonFile() {
     echo '            "password": "zoneslee",'
     echo '        },'
     echo '        "grpc_conf": {'
-    echo "            \"host\": \"$ip\","  # 使用变量替换
+    echo "            \"host\": \"$DOCKER_IP\","  # 使用变量替换
     echo '        },'
     echo '    }'
   } > envPythonConfig.py

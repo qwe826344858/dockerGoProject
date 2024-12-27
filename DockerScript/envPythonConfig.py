@@ -9,6 +9,6 @@ def getEnvConfig():
             "password": "zoneslee",
         },
         "grpc_conf": {
-            "host": "10.0.12.8",
+            "host": "172.17.0.1",
         },
     }
