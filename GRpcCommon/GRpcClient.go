@@ -1,10 +1,9 @@
-package CommonLogic
+package GRpcCommon
 
 import (
 	"context"
+	"dockerGoProject/CommonLogic"
 	envcfg "dockerGoProject/DockerScript"
-	extProto "dockerGoProject/ExternalProto"
-	proto "dockerGoProject/proto"
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -13,29 +12,36 @@ import (
 	"time"
 )
 
+type GRpcClientParam struct {
+	Ctx	 context.Context `json:"ctx"`
+	Cancel context.CancelFunc `json:"cancel"`
+	Conn *grpc.ClientConn `json:"conn"`
+}
+
+
 // 客户端实例
 type AoClient interface {}
 
 func NewGRpcFactory() (f *GRpcFactory) {
 	f = new(GRpcFactory)
 	// 先初始化 注册表
-	f.clientRegistry = make(map[ServiceName]func(*grpc.ClientConn) AoClient,0)
+	f.clientRegistry = make(map[CommonLogic.ServiceName]func(*grpc.ClientConn) AoClient,0)
 	// 注册客户端
-	f.RegisterAllClient()
+	// f.RegisterAllClient()
 
 	return f
 }
 
 type GRpcFactory struct {
 	mu sync.Mutex
-	clientRegistry map[ServiceName]func(*grpc.ClientConn) AoClient	// 注册表
+	clientRegistry map[CommonLogic.ServiceName]func(*grpc.ClientConn) AoClient // 注册表
 	Param *GRpcClientParam
 }
 
 
-func(f *GRpcFactory) GetClient(sName ServiceName) (client AoClient,err error) {
+func(f *GRpcFactory) GetClient(sName CommonLogic.ServiceName) (client AoClient,err error) {
 
-	p,errMsg  := GetServicePort(sName)
+	p,errMsg  := CommonLogic.GetServicePort(sName)
 	if errMsg != ""{
 		err = fmt.Errorf(errMsg)
 		log.Fatalf("failed to GetServicePort: %v", errMsg)
@@ -47,7 +53,7 @@ func(f *GRpcFactory) GetClient(sName ServiceName) (client AoClient,err error) {
 	port := fmt.Sprintf("%s:%d",GrpcHost,p)
 
 	// 创建带有超时的上下文
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 
 	// 使用 grpc.NewClient 连接 gRPC 服务器
 	// grpc.Dial和grpc.DialContext 已弃用
@@ -86,7 +92,7 @@ func(f *GRpcFactory)CloseClient(){
 }
 
 // 注册客户端构造函数
-func(f *GRpcFactory)RegisterClient(sName ServiceName, constructor func(*grpc.ClientConn) AoClient) {
+func(f *GRpcFactory)RegisterClient(sName CommonLogic.ServiceName, constructor func(*grpc.ClientConn) AoClient) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	f.clientRegistry[sName] = constructor
@@ -97,15 +103,15 @@ func(f *GRpcFactory)RegisterClient(sName ServiceName, constructor func(*grpc.Cli
 
 // 批量注册 也可以单个注册
 func (f *GRpcFactory) RegisterAllClient()  {
-	f.RegisterClient("DockerGoProjectAo",NewDockerGoProjectAoClient)
-	f.RegisterClient("DockerProjectAo",NewDockerProjectAoClient)
+	// 注册参数
+	f.RegisterClient("TestAo", func(conn *grpc.ClientConn) AoClient {return struct {}{}})
 	return
 }
-
-func NewDockerGoProjectAoClient(conn *grpc.ClientConn)(client AoClient ){
-	return proto.NewDockerGoProjectAoClient(conn)
-}
-
-func NewDockerProjectAoClient(conn *grpc.ClientConn)(client AoClient ){
-	return extProto.NewDockerProjectAoClient(conn)
-}
+//
+//func NewDockerGoProjectAoClient(conn *grpc.ClientConn)(client AoClient ){
+//	return proto.NewDockerGoProjectAoClient(conn)
+//}
+//
+//func NewDockerProjectAoClient(conn *grpc.ClientConn)(client AoClient ){
+//	return extProto.NewDockerProjectAoClient(conn)
+//}

@@ -13,6 +13,12 @@ import (
 	status "google.golang.org/grpc/status"
 )
 
+import (
+	"dockerGoProject/CommonLogic"
+	grpcClient "dockerGoProject/GRpcCommon"
+	"fmt"
+)
+
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
 // Requires gRPC-Go v1.64.0 or later.
@@ -120,4 +126,23 @@ var DockerGoProjectAo_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "DockerGoProjectAo.proto",
+}
+
+func GetDockerGoProjectAoClient()(f *grpcClient.GRpcFactory,Client DockerGoProjectAoClient,err error){
+	var ServiceName CommonLogic.ServiceName= "DockerGoProjectAo"
+	f = grpcClient.NewGRpcFactory()
+	// 注册客户端
+	f.RegisterClient(ServiceName, func(conn *grpc.ClientConn) grpcClient.AoClient {return NewDockerGoProjectAoClient(conn)})
+	client,err := f.GetClient(ServiceName)
+	if err != nil {
+		return
+	}
+
+	// 类型断言为具体的客户端类型
+	Client, ok := client.(DockerGoProjectAoClient)
+	if !ok {
+		err = fmt.Errorf("client is not of type DockerProjectAoClient")
+		return
+	}
+	return
 }

@@ -1,5 +1,6 @@
 # shell
 
+sudo docker stop dockergoprojectao
 sudo docker rm dockergoprojectao
 sudo docker rmi zoneslee/dockergoproject:v1.0
 

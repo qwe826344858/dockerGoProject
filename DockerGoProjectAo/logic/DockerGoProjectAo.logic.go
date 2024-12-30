@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"dockerGoProject/CommonLogic"
 	extProto "dockerGoProject/ExternalProto"
 	proto "dockerGoProject/proto"
 	"encoding/json"
@@ -31,12 +30,13 @@ func (logic *DockerGoProjectAoLogic) GetItemInfo(ctx context.Context, req *proto
 		return
 	}
 
-	f,dockerPyClient,err :=CommonLogic.GetDockerProjectAoClient()
-
+	// 入参
 	ClientReq := &extProto.GetItemInfoReq{
 		ReqHeader: &extProto.RequestHeader{},
 		ItemId: req.ItemId,
 	}
+
+	f,dockerPyClient,err :=extProto.GetDockerProjectAoClient()
 	ServiceResp,err := dockerPyClient.GetItemInfo(f.Param.Ctx,ClientReq)
 	if err != nil{
 		log.Fatalf("GetItemInfo err:%v",err)
