@@ -1,8 +1,8 @@
 package main
 
 import (
-	extProto "dockerGoProject/ExternalProto"
-	proto "dockerGoProject/proto"
+	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
+	proto "github.com/qwe826344858/dockerGoProject/proto"
 	"fmt"
 	"log"
 	"sync"

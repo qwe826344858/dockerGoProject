@@ -14,8 +14,8 @@ import (
 )
 
 import (
-	"dockerGoProject/CommonLogic"
-	grpcClient "dockerGoProject/GRpcCommon"
+	"github.com/qwe826344858/dockerGoProject/CommonLogic"
+	grpcClient "github.com/qwe826344858/dockerGoProject/GRpcCommon"
 	"fmt"
 )
 

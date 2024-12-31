@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
-	extProto "dockerGoProject/ExternalProto"
-	proto "dockerGoProject/proto"
+	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
+	proto "github.com/qwe826344858/dockerGoProject/proto"
 	"encoding/json"
 	"errors"
 	"google.golang.org/grpc"
