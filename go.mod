@@ -1,4 +1,4 @@
-module dockerGoProject
+module github.com/qwe826344858/dockerGoProject
 
 go 1.22.1
 
