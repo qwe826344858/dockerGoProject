@@ -2,8 +2,8 @@ package GRpcCommon
 
 import (
 	"context"
-	"github.com/qwe826344858/dockerGoProject/CommonLogic"
-	envcfg "github.com/qwe826344858/dockerGoProject/DockerScript"
+	"dockerGoProject/CommonLogic"
+	envcfg "dockerGoProject/DockerScript"
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
