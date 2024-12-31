@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	google.golang.org/grpc v1.69.2
 	google.golang.org/protobuf v1.36.0
+	github.com/qwe826344858/dockerGoProject/CommonLogic master
 )
 
 require (

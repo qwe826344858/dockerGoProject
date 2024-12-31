@@ -54,3 +54,6 @@ echo "go get all is done"
 go mod tidy
 echo "go mod tidy is done"
 
+
+
+sed -i '15i \nimport (\n\t"dockerGoProject/CommonLogic"\n\tgrpcClient "dockerGoProject/GRpcCommon"\n\t"fmt"\n)' test.go
