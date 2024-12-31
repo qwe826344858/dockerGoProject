@@ -37,7 +37,7 @@ else
   go get -u google.golang.org/grpc
   go get -u google.golang.org/protobuf/cmd/protoc-gen-go
   go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
-  go get -u github.com/qwe826344858/dockerGoProject
+  go get -u github.com/qwe826344858/dockerGoProject@master
   echo "go get rpc is done" 
 
 fi
@@ -65,7 +65,6 @@ done
 # 使用字符串匹配去除后缀
 if [[ $input_string == *".proto" ]]; then
     GrpcPbFile="${input_string%.proto}_grpc.pb.go"
-        echo "file:${GrpcPbFile}"
 else
     echo "输入的字符串不包含 .proto 后缀。"
     exit 1
@@ -73,7 +72,7 @@ fi
 
 
 if [ -e "${GrpcPbFile}" ]; then
-  echo "文件存在 覆写代码"
+  echo "文件存在 覆写代码 file:${GrpcPbFile}"
   sudo chmod 777 "${GrpcPbFile}"
   sudo sed -i '15i import (\n\t"github.com/qwe826344858/dockerGoProject/CommonLogic"\n\tgrpcClient "github.com/qwe826344858/dockerGoProject/GRpcCommon"\n\t"fmt"\n)'  "${GrpcPbFile}"
 
