@@ -17,7 +17,7 @@ type DockerGoProjectAoLogic struct {
 
 func NewDockerGoProjectAoLogic() (*grpc.Server, error) {
 	server := new(DockerGoProjectAoLogic)
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.MaxConcurrentStreams(10)) //最大连接数为10
 	proto.RegisterDockerGoProjectAoServer(s, server)
 
 	return s, nil
