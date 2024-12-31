@@ -1,4 +1,5 @@
 #!/bin/bash 
+# 用于生成基本的配置化文件
 
 makeGoFile() {
   DOCKER_IP=$(ifconfig docker0 | grep 'inet ' | awk '{print $2}')

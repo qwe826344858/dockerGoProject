@@ -1,0 +1,8 @@
+CommonLogic,Daemon,DockerGoProjectAo是开发使用项目目录
+DockerScript 目录docker的相关脚本生成配置化文件以及最开始执行打包golang的镜像的Dockerfile文件
+ExternalProto 目录存放的是外部项目非go的proto文件，便于调用
+grpc_tool 目录存放了go和python的grpc项目生成文件 autogen-go.sh 或 autogen-py.sh 用户项目生成打包的脚本
+GRpcCommon 目录是GRpc相关文件 如GRpcClient.go 是用于自动注册客户端调用对应服务实例的文件
+proto 目录存放本项目的proto文件
+Dockerfile 文件用于编译项目grpc服务端生成可执行文件部署到Docker中
+RebuildDocker.sh 脚本根据当前目录下的Dockerfile重新打包镜像部署
