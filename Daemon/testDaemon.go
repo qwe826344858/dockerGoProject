@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
 	proto "github.com/qwe826344858/dockerGoProject/proto"
-	"fmt"
 	"log"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -19,15 +20,15 @@ func main(){
 func BenchmarkMyFunction() {
 	var wg sync.WaitGroup
 	start := time.Now()
-	numRequests := 1000
+	numRequests := 10
 
-	for i := 0; i < numRequests; i++ {
+	// TODO Fix ERR : weakly-referenced object no longer exists
+	for i := 1; i < numRequests; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			ret := testGoService()
+			ret := testGoService(int64(i))
 			if ret == false {
-				fmt.Println("Error:")
 				return
 			}
 			// Optionally print the reply
@@ -65,8 +66,10 @@ func testPyService(){
 	defer f.CloseClient()
 }
 
-func testGoService() bool{
+func testGoService(i int64) bool{
 	f,client,err :=proto.GetDockerGoProjectAoClient()
+	id := getGoroutineID()
+	fmt.Printf("f_ctx:%v\n f_conn:%v\n f_cancel:%v\n id:%v\n",f.Param.Ctx,f.Param.Conn,f.Param.Cancel,id)
 	defer f.CloseClient()
 	if err != nil {
 		log.Fatalf("GetDockerGoProjectAoClient err:%v",err)
@@ -75,7 +78,7 @@ func testGoService() bool{
 
 	req := &proto.GetItemInfoReq{
 		ReqHeader: &proto.RequestHeader{},
-		ItemId: 2,
+		ItemId: i,
 	}
 
 
@@ -84,7 +87,22 @@ func testGoService() bool{
 		log.Fatalf("GetItemInfo err:%v",err)
 		return false
 	}
-	fmt.Printf("testPyService resp:%v \n",resp)
+	fmt.Printf("testGoService resp:%v \n",resp)
 
-	return false
+	return true
+}
+
+
+func getGoroutineID() int {
+	buf := make([]byte, 64) // 创建用于存储 goroutine 信息的缓冲区
+	n := runtime.Stack(buf, true)
+	for _, line := range string(buf[:n]) {
+		if line == '\n' {
+			break
+		}
+	}
+	// 返回 goroutine ID
+	var id int
+	fmt.Sscanf(string(buf[:n]), "goroutine %d", &id)
+	return id
 }
