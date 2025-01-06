@@ -2,9 +2,9 @@ package GRpcCommon
 
 import (
 	"context"
+	"fmt"
 	"github.com/qwe826344858/dockerGoProject/CommonLogic"
 	envcfg "github.com/qwe826344858/dockerGoProject/DockerScript"
-	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
@@ -13,8 +13,8 @@ import (
 )
 
 type GRpcClientParam struct {
-	Ctx	 context.Context `json:"ctx"`
-	Cancel context.CancelFunc `json:"cancel"`
+	//Ctx	 context.Context `json:"ctx"`
+	//Cancel context.CancelFunc `json:"cancel"`
 	Conn *grpc.ClientConn `json:"conn"`
 }
 
@@ -53,7 +53,7 @@ func(f *GRpcFactory) GetClient(sName CommonLogic.ServiceName) (client AoClient,e
 	port := fmt.Sprintf("%s:%d",GrpcHost,p)
 
 	// 创建带有超时的上下文
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	_, _ = context.WithTimeout(context.TODO(), 30*time.Second)
 
 	// 使用 grpc.NewClient 连接 gRPC 服务器
 	// grpc.Dial和grpc.DialContext 已弃用
@@ -65,8 +65,8 @@ func(f *GRpcFactory) GetClient(sName CommonLogic.ServiceName) (client AoClient,e
 
 	// 拼接参数
 	f.Param = &GRpcClientParam{
-	Ctx: ctx,
-	Cancel: cancel,
+	//Ctx: ctx,
+	//Cancel: cancel,
 	Conn: conn,
 	}
 
@@ -86,8 +86,14 @@ func(f *GRpcFactory) GetClient(sName CommonLogic.ServiceName) (client AoClient,e
 
 
 func(f *GRpcFactory)CloseClient(){
-	defer f.Param.Cancel()
-	defer f.Param.Conn.Close()
+	defer func(Conn *grpc.ClientConn) {
+		err := Conn.Close()
+		if err != nil {
+			log.Fatalf("CloseClient grpc close faild! err:%v",err)
+			var e any = err
+			panic(e)
+		}
+	}(f.Param.Conn)
 	return
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
 	proto "github.com/qwe826344858/dockerGoProject/proto"
@@ -55,7 +56,7 @@ func testPyService(){
 	}
 
 
-	resp,err := dockerPyClient.GetItemInfo(f.Param.Ctx,req)
+	resp,err := dockerPyClient.GetItemInfo(context.Background(),req)
 	if err != nil{
 		log.Fatalf("GetItemInfo err:%v",err)
 		return
@@ -69,7 +70,7 @@ func testPyService(){
 func testGoService(i int64) bool{
 	f,client,err :=proto.GetDockerGoProjectAoClient()
 	id := getGoroutineID()
-	fmt.Printf("f_ctx:%v\n f_conn:%v\n f_cancel:%v\n id:%v\n",f.Param.Ctx,f.Param.Conn,f.Param.Cancel,id)
+	fmt.Printf(" f_conn:%v\n  id:%v\n",f.Param.Conn,id)
 	defer f.CloseClient()
 	if err != nil {
 		log.Fatalf("GetDockerGoProjectAoClient err:%v",err)
@@ -82,7 +83,7 @@ func testGoService(i int64) bool{
 	}
 
 
-	resp,err := client.GetItemInfo(f.Param.Ctx,req)
+	resp,err := client.GetItemInfo(context.Background(),req)
 	if err != nil{
 		log.Fatalf("GetItemInfo err:%v",err)
 		return false

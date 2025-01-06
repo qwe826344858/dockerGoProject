@@ -6,6 +6,9 @@ WORKDIR /usr/src/app/dockerGoProject
 
 # 创建工作目录
 RUN mkdir "/usr/src/app/dockerGoProject/log"
+# 设置gprc日志环境变量
+RUN export GRPC_GO_LOG_VERBOSITY_LEVEL=99
+RUN export GRPC_GO_LOG_SEVERITY_LEVEL=info
 
 # 复制Ao服务到容器中
 COPY DockerGoProjectAoServer /usr/src/app/dockerGoProject

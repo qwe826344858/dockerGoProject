@@ -2,12 +2,14 @@ package logic
 
 import (
 	"context"
-	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
-	proto "github.com/qwe826344858/dockerGoProject/proto"
 	"encoding/json"
 	"errors"
+	"fmt"
+	extProto "github.com/qwe826344858/dockerGoProject/ExternalProto"
+	proto "github.com/qwe826344858/dockerGoProject/proto"
 	"google.golang.org/grpc"
 	"log"
+	"runtime"
 )
 
 type DockerGoProjectAoLogic struct {
@@ -25,8 +27,10 @@ func NewDockerGoProjectAoLogic() (*grpc.Server, error) {
 
 // 获取商品信息
 func (logic *DockerGoProjectAoLogic) GetItemInfo(ctx context.Context, req *proto.GetItemInfoReq) (resp *proto.GetItemInfoResp, err error) {
+	resp = new(proto.GetItemInfoResp)
 	if req.GetItemId() < 1 {
-		err = SetError("商品id入参异常")
+		strErrorMsg := "商品id入参异常"
+		resp.RespHeader = &proto.ResponseHeader{Errno:10001,Errmsg:strErrorMsg}
 		return
 	}
 
@@ -37,9 +41,10 @@ func (logic *DockerGoProjectAoLogic) GetItemInfo(ctx context.Context, req *proto
 	}
 
 	f,dockerPyClient,err :=extProto.GetDockerProjectAoClient()
-	ServiceResp,err := dockerPyClient.GetItemInfo(f.Param.Ctx,ClientReq)
+	defer f.CloseClient()
+	ServiceResp,err := dockerPyClient.GetItemInfo(context.Background(),ClientReq)
 	if err != nil{
-		log.Fatalf("GetItemInfo err:%v",err)
+		customPanic(fmt.Sprintf("dockerPyClient GetItemInfo itemId:%v err:%v",req.ItemId,err))
 		return
 	}
 
@@ -72,4 +77,15 @@ func GetJsonStr(v any) string {
 
 func SetError(strErrMsg string) error {
 	return errors.New(strErrMsg)
+}
+
+func customPanic(msg any) {
+	// 输出错误信息
+	log.Printf("fatal error: %s context:%v", msg,context.Background())
+	// 打印调用栈信息
+	buf := make([]byte, 1024)
+	stackSize := runtime.Stack(buf, true)
+	log.Printf("painc :\n%s", buf[:stackSize])
+	// 结束程序
+	// os.Exit(1)
 }
