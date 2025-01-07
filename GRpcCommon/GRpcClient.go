@@ -41,7 +41,7 @@ type GRpcFactory struct {
 
 func(f *GRpcFactory) GetClient(sName CommonLogic.ServiceName) (client AoClient,err error) {
 
-	p,errMsg  := CommonLogic.GetServicePort(sName)
+	p,errMsg  := CommonLogic.GetServicePort(string(sName))
 	if errMsg != ""{
 		err = fmt.Errorf(errMsg)
 		log.Fatalf("failed to GetServicePort: %v", errMsg)

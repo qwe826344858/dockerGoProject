@@ -37,7 +37,7 @@ func (logic *DockerGoProjectAoLogic) GetItemInfo(ctx context.Context, req *proto
 	// 入参
 	ClientReq := &extProto.GetItemInfoReq{
 		ReqHeader: &extProto.RequestHeader{},
-		ItemId: req.ItemId,
+		ItemId: req.GetItemId(),
 	}
 
 	f,dockerPyClient,err :=extProto.GetDockerProjectAoClient()

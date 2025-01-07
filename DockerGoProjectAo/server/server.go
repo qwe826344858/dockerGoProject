@@ -8,9 +8,14 @@ import (
 	"net"
 )
 
+var strServiceName = "DockerGoProjectAo"
+func init(){
+	CommonLogic.LoggerInit(strServiceName)
+}
+
 func main() {
 
-	p,errMsg  := CommonLogic.GetServicePort("DockerGoProjectAo")
+	p,errMsg  := CommonLogic.GetServicePort(strServiceName)
 	if errMsg != ""{
 		log.Fatalf("failed to GetServicePort: %v", errMsg)
 		return
@@ -28,7 +33,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("gRPC server is running on port => %s", port)
+	log.Printf("gRPC server is running on port => %s \n", port)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

@@ -11,13 +11,14 @@ var m = map[ServiceName]Port{
 }
 
 // 获取服务的分配的端口号
-func GetServicePort(sName ServiceName)(port Port,strErrMsg string){
-	if _,ok := m[sName]; !ok{
+func GetServicePort(sName string)(port Port,strErrMsg string){
+	s := ServiceName(sName)
+	if _,ok := m[s]; !ok{
 		strErrMsg =  fmt.Sprintf("不存在的服务名称! %s",sName)
 		return
 	}
 
-	port = m[sName]
+	port = m[s]
 	return
 }
 
